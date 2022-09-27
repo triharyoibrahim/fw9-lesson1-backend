@@ -2,7 +2,8 @@ const contactUsModel = require("../../models/contactUs");
 const response = require("../../helpers/standardResponse");
 
 exports.getAllContactUs = (req, res) => {
-  contactUsModel.getAllContactUs((results) => {
+  contactUsModel.getAllContactUs((err, results) => {
+      // console.log(results)
     return response(res, "Success get data", results);
   });
 };

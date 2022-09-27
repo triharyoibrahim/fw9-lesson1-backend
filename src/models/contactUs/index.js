@@ -1,10 +1,11 @@
 const db = require("../../helpers/db");
 
-exports.getAllContactUs = () => {
+exports.getAllContactUs = (cb) => {
     db.query(
         "SELECT * FROM contactus",
         (err, res) => {
           console.log(err);
+          // console.log(res, 999);
           cb(err, res.rows);
         })
     
