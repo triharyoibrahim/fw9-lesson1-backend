@@ -51,4 +51,37 @@ exports.createContactUs = (data, cb) => {
       cb(res);
     });
   };
+
+  exports.updateContactUs = (id, data, cb) => {
+    console.log();
+    let val = [id];
+  
+    const filtered = {};
+  
+    const objt = {
+      
+      name: data.name,
+      email: data.email,
+      message: data.message,
+    };
+  
+    for (let x in objt) {
+      if (objt[x] !== null && objt[x]!= '') {
+        filtered[x] = objt[x];
+        val.push(objt[x]);
+      }
+    }
+  
+    const key = Object.keys(filtered);
+    const finalResult = key.map((o, ind) => `${o}=$${ind + 2}`);
+  
+    const q = `UPDATE contactus SET ${finalResult} WHERE id=$1 RETURNING *`;
+    db.query(q, val, (err, res) => {
+      if (res) {
+        cb(err, res);
+      } else {
+        cb(err, res);
+      }
+    });
+  };
   

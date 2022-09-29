@@ -1,6 +1,7 @@
 const contactUsModel = require("../../models/contactUs");
 const response = require("../../helpers/standardResponse");
 const { LIMIT_DATA } = process.env;
+const { validationResult } = require("express-validator");
 
 exports.getAllContactUs = (req, res) => {
   const {
@@ -42,6 +43,16 @@ exports.getAllContactUs = (req, res) => {
 };
 
 exports.createContactUs = (req, res) => {
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return response(
+      res,
+      "Please fill data correctly",
+      validation.array(),
+      null,
+      400
+    );
+  }
     contactUsModel.createContactUs(req.body, (results) => {
         return response(res, "Created successfully", results[0]);
     });
@@ -59,4 +70,34 @@ exports.deleteContactUs = (req, res) => {
     }
   });
 };
+
+exports.updateContactUs = (req, res) => {
+  const { id } = req.params;
+  const validation = validationResult(req);
+  
+  if (!validation.isEmpty()) {
+    return response(
+      res,
+      "Please fill data correctly",
+      validation.array(),
+      null,
+      400
+    );
+  }
+
+  contactUsModel.updateContactUs(id, req.body, (err, results) => {
+    // console.log(results);
+        if (results.rows.length > 0) {
+      return response(
+        res,
+        `Update data user id : ${id} successfully`,
+        results.rows[0]
+      );
+    } else {
+      return response(res, `data user id : ${id} not found`, null, 404);
+    }
+  });
+};
+
+
 
